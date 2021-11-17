@@ -19,6 +19,7 @@ let path = {
         img: sourceFolder + "/img/**/*.{jpg,gif,ico,webp}",
         fonts: sourceFolder + "/fonts/*.ttf",
         icons: sourceFolder + "/icons/*.{png,svg}",
+        puresnow: sourceFolder + "/js/puresnow.js"
     },
     watch : {
         html: sourceFolder + "/**/*.html",
@@ -149,6 +150,21 @@ function icons() {
         .pipe(browsersync.stream());
 }
 
+function pureSnow() {
+    return src(path.src.puresnow)
+        .pipe(fileinclude())
+        .pipe(dest(path.build.js))
+        .pipe(
+            uglify(),
+        )
+        .pipe(
+            rename({
+                extname: ".min.js",
+            })
+        )
+        .pipe(dest(path.build.js));
+}
+
 function fonts(params) {
     src(path.src.fonts)
         .pipe(ttf2woff())
@@ -212,9 +228,10 @@ function clean(params) {
     return del(path.clean);
 }
 
-let build = gulp.series(clean, gulp.parallel(js, css, html, images, fonts, icons));
+let build = gulp.series(clean, gulp.parallel(js, css, html, images, fonts, icons, pureSnow));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
+exports.puresnow = pureSnow;
 exports.icons = icons;
 exports.fontsStyle = fontsStyle;
 exports.fonts = fonts;

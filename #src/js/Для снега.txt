@@ -1,0 +1,25 @@
+HTML:
+<div id="snow"></div> - в самый верх
+
+CSS:
+#snow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vh;
+    opacity: .9;
+}
+
+.snowflake {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(white, white);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 2px white);
+}
+
+JS:
+toggleSnow();
+let total = 300;
